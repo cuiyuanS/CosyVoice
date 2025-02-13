@@ -58,7 +58,7 @@ async def inference_sft(tts_text: str = Form(), spk_id: str = Form()):
 
 
 @app.post("/api/inference/zero-shot-v2")
-async def zeroShot(tts: str = Body(), prompt: str = Body(), audio_path: str = Body(), save_path: str = Body()):
+async def zero_shot(tts: str = Body(), prompt: str = Body(), audio_path: str = Body(), save_path: str = Body()):
     prompt_speech_16k = load_wav(audio_path, 16000)
     for i, j in enumerate(cosyvoice.inference_zero_shot(
             tts, prompt, prompt_speech_16k, stream=False)):
@@ -112,7 +112,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     try:
-        cosyvoice = CosyVoice2(args.model_dir)
+        cosyvoice = CosyVoice2(args.model_dir, load_jit=False, load_trt=False, fp16=False)
     except Exception:
         raise TypeError('no valid model_type!')
     uvicorn.run(app, host="0.0.0.0", port=args.port)
